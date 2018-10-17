@@ -2,39 +2,12 @@ import React, { Component } from "react";
 import classes from "./Quiz.css";
 import ActiveQuiz from "../../components/ActiveQuiz/ActiveQuiz";
 import FinishedQuiz from "../../components/FinishedQuiz/FinishedQuiz";
+import axios from "../../axios/axios-quiz";
+import Loader from "../../components/UI/Loader/Loader";
+import { connect } from "react-redux";
+import { fetchQuizById } from "../../store/actions/quiz";
 
 class Quiz extends Component {
-  state = {
-    results: {},
-    isFinished: false,
-    activeQuestion: 0,
-    answerState: null,
-    quiz: [
-      {
-        question: "Какого цвета небо?",
-        rightAnswerId: 4,
-        id: 1,
-        answers: [
-          { text: "Красный", id: 1 },
-          { text: "Черный", id: 2 },
-          { text: "Зеленый", id: 3 },
-          { text: "Синий", id: 4 }
-        ]
-      },
-      {
-        question: "В каком году основали Санкт-Петербург?",
-        rightAnswerId: 3,
-        id: 2,
-        answers: [
-          { text: "1700", id: 1 },
-          { text: "1702", id: 2 },
-          { text: "1703", id: 3 },
-          { text: "1893", id: 4 }
-        ]
-      }
-    ]
-  };
-
   onAnswerClickHandler = answerId => {
     if (this.state.answerState) {
       const key = Object.keys(this.state.answerState)[0];
@@ -87,12 +60,18 @@ class Quiz extends Component {
     });
   };
 
+  componentDidMount() {
+    this.props.fetchQuizById(this.props.match.params.id);
+  }
+
   render() {
     return (
       <div className={classes.Quiz}>
         <div className={classes.QuizWrapper}>
           <h1>Ответьте на все вопросы</h1>
-          {this.state.isFinished ? (
+          {this.state.loading ? (
+            <Loader />
+          ) : this.state.isFinished ? (
             <FinishedQuiz
               results={this.state.results}
               quiz={this.state.quiz}
@@ -114,4 +93,24 @@ class Quiz extends Component {
   }
 }
 
-export default Quiz;
+function mapStateToProps(state) {
+  return {
+    results: state.quiz.result,
+    isFinished: state.quiz.isFinished,
+    activeQuestion: state.quiz.activeQuestion,
+    answerState: state.quiz.answerState,
+    quiz: state.quiz.quiz,
+    loading: state.quiz.loading
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    fetchQuizById: id => dispatch(fetchQuizById())
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Quiz);
