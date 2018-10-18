@@ -8,9 +8,10 @@ import { fetchQuizes } from "../../store/actions/quiz";
 class QuizList extends Component {
   renderQuizes() {
     return this.props.quizes.map(quiz => {
+      console.log(quiz);
       return (
         <li key={quiz.id}>
-          <NavLink to={"/quiz/" + quiz.id}>Тест {quiz.name}</NavLink>
+          <NavLink to={"/quiz/" + quiz.id}>{quiz.name}</NavLink>
         </li>
       );
     });
