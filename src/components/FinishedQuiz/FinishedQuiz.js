@@ -4,8 +4,6 @@ import Button from "../UI/button/button";
 import { Link } from "react-router-dom";
 
 export default props => {
-  console.log(props.results);
-
   const successCount = Object.keys(props.results).reduce((total, key) => {
     if (props.results[key] === "success") {
       total++;
