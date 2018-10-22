@@ -32,9 +32,8 @@ class Drawer extends Component {
       cls.push(classes.close);
     }
 
-    const links = [{ to: "/", label: "Список", exact: true }];
-
-    console.log("Auth", this.props.isAuthenticated);
+    const links = [{ to: "/", label: "Список", exact: true }, { to: "/film", label: "Добавить фильм", exact: true }];
+    
 
     if (this.props.isAuthenticated) {
       links.push({
