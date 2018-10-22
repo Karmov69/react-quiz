@@ -5,7 +5,8 @@ import axios from "axios";
 class RandomFilm extends Component {
   state = {
     films: [],
-    randFilm: ""
+    randFilm: "",
+    users:[]
   };
 
   componentDidMount = () => {
@@ -38,6 +39,25 @@ class RandomFilm extends Component {
     this.setState({ randFilm: this.state.films[number].filmName });
   };
 
+  getUsers = () => {
+    // axios
+    //   .get("https://react-quiz-4129b.firebaseio.com/authentication/users")
+    //   .then(response => {
+    //     let users = [];
+
+    //     for (const i in response.data) {
+    //       if (response.data.hasOwnProperty(i)) {
+    //         users.push(response.data[i]);
+    //       }
+    //     }
+    //     this.setState({ users });
+    //     console.log(users);
+    //   })
+    //   .catch(e => {
+    //     console.log(e);
+    //   });
+  };
+
   render() {
     return (
       <div className={classes.RandomFilm}>
@@ -49,6 +69,7 @@ class RandomFilm extends Component {
           </button>
           <hr />
           <p>Фильм: {this.state.randFilm}</p>
+          <p>{this.getUsers()}</p>
         </div>
       </div>
     );
