@@ -6,6 +6,8 @@ import QuizList from "./containers/QuizList/QuizList";
 import Auth from "./containers/Auth/Auth";
 import Film from './containers/Film/Film';
 import QuizCreator from "./containers/QuizCreator/QuizCreator";
+import AddFilm from "./containers/AddFilm/AddFilm";
+import RandomFilm from "./containers/RandomFilm/RandomFilm";
 import { connect } from "react-redux";
 import Logout from "./components/Logout/Logout";
 import { autoLogin } from "./store/actions/auth";
@@ -18,7 +20,11 @@ class App extends Component {
     let routes = <Switch>
         <Route path="/auth" component={Auth} />
         <Route path="/quiz/:id" component={Quiz} />
+<<<<<<< HEAD
         <Route path="/film" component={Film} />
+=======
+        <Route path="/random-film" component={RandomFilm} />
+>>>>>>> ce345c89c3742e0f04e8497211083909b6d0c343
         <Route path="/" exact component={QuizList} />
         <Redirect to="/" />
       </Switch>;
@@ -27,7 +33,12 @@ class App extends Component {
           <Route path="/quiz-creator" component={QuizCreator} />
           <Route path="/quiz/:id" component={Quiz} />
           <Route path="/logout" component={Logout} />
+<<<<<<< HEAD
           <Route path="/film" component={Film} />
+=======
+          <Route path="/add-film" component={AddFilm} />
+          <Route path="/random-film" component={RandomFilm} />
+>>>>>>> ce345c89c3742e0f04e8497211083909b6d0c343
           <Route path="/" exact component={QuizList} />
           <Redirect to="/" />
         </Switch>;
