@@ -16,6 +16,38 @@ class AddFilm extends Component {
 
   addFilmHandler = () => {
     if (this.state.currentFilmNumber < this.state.maxFilm) {
+      axios
+        .get("https://react-quiz-4129b.firebaseio.com/all-films.json")
+        .then(response => {
+          let allFilms = response.data;
+
+          if (this.state.films) {
+            let filmsState = this.state.films;
+            for (const iterator of filmsState) {
+              let filmState = iterator.filmName;
+
+              for (const i in allFilms) {
+                if (allFilms.hasOwnProperty(i)) {
+                  const elements = allFilms[i];
+                  for (const j in elements.films) {
+                    if (elements.films.hasOwnProperty(j)) {
+                      const film = elements.films[j].filmName;
+                      if (filmState === film) {
+                        console.log("Этот фильм уже есть в списке");
+                        this.state.films.push({
+                          filmName: this.state.inputFilmName
+                        });
+                      } else {
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        })
+        .catch(e => {});
+
       this.state.films.push({
         filmName: this.state.inputFilmName
       });
@@ -29,11 +61,17 @@ class AddFilm extends Component {
 
   filmList = () => {
     return this.state.films.map((film, index) => {
-      return <li key={index}>
-          {film.filmName} <button type="button" onClick={this.deleteFilmHandler.bind(this, film.filmName)}>
+      return (
+        <li key={index}>
+          {film.filmName}{" "}
+          <button
+            type="button"
+            onClick={this.deleteFilmHandler.bind(this, film.filmName)}
+          >
             Удалить
           </button>
-        </li>;
+        </li>
+      );
     });
   };
 
@@ -41,11 +79,10 @@ class AddFilm extends Component {
     const films = this.state.films;
     let newFilmsArray = [];
 
-
     for (const i in films) {
       if (films.hasOwnProperty(i)) {
         const element = films[i];
-        if(element.filmName!==name) {
+        if (element.filmName !== name) {
           newFilmsArray.push(element);
         } else {
           let count = this.state.currentFilmNumber;
@@ -56,13 +93,21 @@ class AddFilm extends Component {
         }
       }
     }
-    
   }
 
   sendFilms = async () => {
     await axios.post("https://react-quiz-4129b.firebaseio.com/films.json", {
       films: this.state.films,
       author: localStorage.getItem("login")
+    });
+    await axios.post("https://react-quiz-4129b.firebaseio.com/all-films.json", {
+      films: this.state.films
+    });
+    this.setState({
+      inputFilmName: "",
+      films: [],
+      maxFilm: 3,
+      currentFilmNumber: 0
     });
   };
 
