@@ -10,12 +10,23 @@ export function auth(email, password, isLogin) {
     };
     let url =
       "https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyC5kTG3pKKqKhyWP6PiVFsJXqjoXyesYJY";
+    let user = {};
     if (isLogin) {
       url =
         "https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyC5kTG3pKKqKhyWP6PiVFsJXqjoXyesYJY";
+    }else {
+      user.login = authData.email;
     }
 
     const response = await axios.post(url, authData);
+    
+    
+    if (user) {
+      await axios.post("https://react-quiz-4129b.firebaseio.com/users.json", user);
+      localStorage.setItem('login', authData.email);
+    }
+    
+
     const data = response.data;
 
     const expirationDate = new Date(

@@ -16,18 +16,15 @@ class App extends Component {
   }
 
   render() {
-    let routes = (
-      <Switch>
+    let routes = <Switch>
         <Route path="/auth" component={Auth} />
         <Route path="/quiz/:id" component={Quiz} />
         <Route path="/random-film" component={RandomFilm} />
         <Route path="/" exact component={QuizList} />
         <Redirect to="/" />
-      </Switch>
-    );
+      </Switch>;
     if (this.props.isAuthenticated) {
-      routes = (
-        <Switch>
+      routes = <Switch>
           <Route path="/quiz-creator" component={QuizCreator} />
           <Route path="/quiz/:id" component={Quiz} />
           <Route path="/logout" component={Logout} />
@@ -35,8 +32,7 @@ class App extends Component {
           <Route path="/random-film" component={RandomFilm} />
           <Route path="/" exact component={QuizList} />
           <Redirect to="/" />
-        </Switch>
-      );
+        </Switch>;
     }
     return <Layout>{routes}</Layout>;
   }
