@@ -9,8 +9,8 @@ class RandomFilm extends Component {
     users:[]
   };
 
-  componentDidMount = () => {
-    axios
+  componentDidMount = async () => {
+    await axios
       .get("https://react-quiz-4129b.firebaseio.com/films.json")
       .then(response => {
         let films = [];
@@ -28,9 +28,25 @@ class RandomFilm extends Component {
   };
 
   filmList = () => {
-    return this.state.films.map((film, index) => {
-      return <li key={index}>{film.filmName}</li>;
-    });
+    if (this.state.films.length!==0) {
+      let resultArr = [];
+      for (const iterator of this.state.films) {
+        let author = iterator.author;
+        
+        for (const key in iterator.films) {
+          if (iterator.films.hasOwnProperty(key)) {
+            const element = iterator.films[key];
+            resultArr.push(element.filmName);
+          }
+        }
+      }
+
+      return resultArr.map((film, index) => {
+        return <li key={index}>
+           {film}
+          </li>;
+      });   
+    }
   };
 
   getRandomFilmHandler = () => {
@@ -39,28 +55,19 @@ class RandomFilm extends Component {
     this.setState({ randFilm: this.state.films[number].filmName });
   };
 
-  getUsers = () => {
-    // axios
-    //   .get("https://react-quiz-4129b.firebaseio.com/authentication/users")
-    //   .then(response => {
-    //     let users = [];
-
-    //     for (const i in response.data) {
-    //       if (response.data.hasOwnProperty(i)) {
-    //         users.push(response.data[i]);
-    //       }
-    //     }
-    //     this.setState({ users });
-    //     console.log(users);
-    //   })
-    //   .catch(e => {
-    //     console.log(e);
-    //   });
+  getFIlms = () => {
+    axios
+      .get("https://react-quiz-4129b.firebaseio.com/films.json")
+      .then(response => {
+        
+      })
+      .catch(e => {
+        console.log(e);
+      });
   };
 
   render() {
-    return (
-      <div className={classes.RandomFilm}>
+    return <div className={classes.RandomFilm}>
         <div>
           <h1>Рандомный фильм</h1>
           <ul>{this.filmList()}</ul>
@@ -69,10 +76,9 @@ class RandomFilm extends Component {
           </button>
           <hr />
           <p>Фильм: {this.state.randFilm}</p>
-          <p>{this.getUsers()}</p>
+          <p>{this.getFIlms()}</p>
         </div>
-      </div>
-    );
+      </div>;
   }
 }
 
