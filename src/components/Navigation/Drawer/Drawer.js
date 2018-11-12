@@ -32,14 +32,10 @@ class Drawer extends Component {
       cls.push(classes.close);
     }
 
-    const links = [{ to: "/", label: "Список", exact: true }];
+    const links = [];
 
     if (this.props.isAuthenticated) {
-      links.push({
-        to: "/quiz-creator",
-        label: "Создать тест",
-        exact: false
-      });
+      
       links.push({
         to: "/add-film",
         label: "Добавить фильм",
@@ -50,11 +46,17 @@ class Drawer extends Component {
         label: "Выборка фильма",
         exact: false
       });
+      links.push({ 
+        to: "/viewed", 
+        label: "Просмотренные", 
+        exact: false 
+      });
       links.push({
         to: "/logout",
         label: "Выйти",
         exact: false
       });
+      
     } else {
       links.push({ to: "/auth", label: "Авторизация", exact: false });
     }

@@ -1,8 +1,8 @@
 .MenuToggle {
   position: fixed;
-  top: 40px;
-  left: 40px;
-  font-size: 20px;
+  top: 15px;
+  left: 15px;
+  font-size: 40px;
   cursor: pointer;
   color: #fff;
   transition: opacity 0.22s ease-in;

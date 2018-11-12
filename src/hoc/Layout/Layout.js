@@ -22,22 +22,17 @@ class Layout extends Component {
   };
 
   render() {
-    return (
-      <div className={classes.Layout}>
-        <Drawer
-          isOpen={this.state.menu}
-          onClose={this.menuCloseHandler}
-          isAuthenticated={this.props.isAuthenticated}
-        />
+    return <div className={classes.Layout}>
+        <Drawer isOpen={this.state.menu} onClose={this.menuCloseHandler} isAuthenticated={this.props.isAuthenticated} />
 
-        <MenuToggle
-          onToggle={this.toggleMenuHandler}
-          isOpen={this.state.menu}
-        />
+        <MenuToggle onToggle={this.toggleMenuHandler} isOpen={this.state.menu} />
 
         <main>{this.props.children}</main>
-      </div>
-    );
+
+        <div className={classes.stars} />
+        <div className={classes.twinkling} />
+        <div className={classes.clouds} />
+      </div>;
   }
 }
 

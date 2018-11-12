@@ -10,13 +10,57 @@ class AddFilm extends Component {
     currentFilmNumber: 0,
     exist: false,
     authorExist: false,
-    message: ""
+    message: "",
+    myViewed: [],
+    visibleViewedList: false
+  };
+
+  componentDidMount = async () => {
+    let currentUser = localStorage.getItem("login");
+    await axios
+      .get("https://react-quiz-4129b.firebaseio.com/all-films.json")
+      .then(response => {
+        let myViewed = [];
+
+        for (const key in response.data) {
+          if (response.data.hasOwnProperty(key)) {
+            const element = response.data[key];
+
+            if (element.author === currentUser) {
+              for (const i in element.films) {
+                if (element.films.hasOwnProperty(i)) {
+                  myViewed.push(element.films[i].filmName);
+                }
+              }
+            }
+          }
+        }
+        this.setState({ myViewed });
+      })
+      .catch(e => {
+        console.log(e);
+      });
   };
 
   handleChange = event => {
     this.setState({ inputFilmName: event.target.value });
   };
 
+  addViewedFilm = name => {
+    if (name) {
+      this.state.films.push({
+        filmName: name,
+        exist: false,
+        id: this.state.currentFilmNumber
+      });
+
+      let countFilm = this.state.currentFilmNumber;
+      this.setState({ currentFilmNumber: countFilm + 1 });
+      this.setState({
+        inputFilmName: ""
+      });
+    }
+  };
   addFilmHandler = () => {
     if (this.state.currentFilmNumber < this.state.maxFilm) {
       this.state.films.push({
@@ -25,6 +69,7 @@ class AddFilm extends Component {
         id: this.state.currentFilmNumber
       });
     }
+
     let countFilm = this.state.currentFilmNumber;
     this.setState({ currentFilmNumber: countFilm + 1 });
     this.setState({
@@ -144,7 +189,8 @@ class AddFilm extends Component {
             axios.post(
               "https://react-quiz-4129b.firebaseio.com/all-films.json",
               {
-                films: this.state.films
+                films: this.state.films,
+                author: localStorage.getItem("login")
               }
             );
             this.setState({
@@ -168,7 +214,8 @@ class AddFilm extends Component {
             axios.post(
               "https://react-quiz-4129b.firebaseio.com/all-films.json",
               {
-                films: this.state.films
+                films: this.state.films,
+                author: localStorage.getItem("login")
               }
             );
             this.setState({
@@ -190,36 +237,62 @@ class AddFilm extends Component {
     // -----------
   };
 
+  getMyViewed = () => {
+    if (this.state.myViewed.length !== 0) {
+      let resultArr = [];
+      for (const iterator of this.state.myViewed) {
+        resultArr.push(iterator);
+      }
+
+      return resultArr.map((film, index) => {
+        return (
+          <li key={index} onClick={this.addViewedFilm.bind(this, film)}>
+            {film}
+          </li>
+        );
+      });
+    }
+  };
+
+  showViewedHandler = () => {
+    this.setState({ visibleViewedList: !this.state.visibleViewedList });
+  }
+
   render() {
-    return (
-      <div className={classes.AddFilm}>
+    return <div className={classes.AddFilm}>
         <div>
           <h1>Добавить фильм</h1>
           <p>{this.state.message}</p>
           <form>
-            {this.state.currentFilmNumber < this.state.maxFilm ? (
-              <div>
-                <input
-                  type="text"
-                  value={this.state.inputFilmName}
-                  onChange={this.handleChange}
-                />
+            {this.state.currentFilmNumber < this.state.maxFilm ? <div>
+                <input type="text" value={this.state.inputFilmName} onChange={this.handleChange} />
                 <button type="button" onClick={this.addFilmHandler}>
                   Добавить
                 </button>
-              </div>
-            ) : null}
+              </div> : null}
 
-            <ul>{this.filmList()}</ul>
-            {this.state.currentFilmNumber === this.state.maxFilm ? (
-              <button type="button" onClick={this.sendFilms}>
+            <ul className={classes.currentFilms}>{this.filmList()}</ul>
+            {this.state.currentFilmNumber === this.state.maxFilm ? <button type="button" onClick={this.sendFilms}>
                 Отправить
-              </button>
-            ) : null}
+              </button> : null}
+
+            {this.state.myViewed.length !== 0 ? <div>
+            <div className={classes.viewedTitle} onClick={this.showViewedHandler}>
+                  <h2 onClick={this.showViewedHandler}>
+                    Раннее добавленные фильмы{" "}
+                  </h2>
+
+                  {this.state.visibleViewedList ? <i className="fa fa-chevron-up" aria-hidden="true"  /> : <i className="fa fa-chevron-down" aria-hidden="true"  />}
+                </div>
+                {this.state.visibleViewedList ? <ul
+                    className={classes.viewed}
+                  >
+                    {this.getMyViewed()}
+                  </ul> : null}
+              </div> : null}
           </form>
         </div>
-      </div>
-    );
+      </div>;
   }
 }
 

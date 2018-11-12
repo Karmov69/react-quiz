@@ -4,33 +4,35 @@ import { Route, Switch, Redirect, withRouter } from "react-router-dom";
 import Quiz from "./containers/Quiz/Quiz";
 import QuizList from "./containers/QuizList/QuizList";
 import Auth from "./containers/Auth/Auth";
-import QuizCreator from "./containers/QuizCreator/QuizCreator";
 import AddFilm from "./containers/AddFilm/AddFilm";
 import RandomFilm from "./containers/RandomFilm/RandomFilm";
+import Viewed from './containers/Viewed/Viewed';
 import { connect } from "react-redux";
 import Logout from "./components/Logout/Logout";
 import { autoLogin } from "./store/actions/auth";
+
+
 class App extends Component {
   componentDidMount() {
     this.props.autoLogin();
   }
-
+  //<Route path="/quiz-creator" component={QuizCreator} />
+  //<Route path="/quiz/:id" component={Quiz} />
   render() {
     let routes = <Switch>
         <Route path="/auth" component={Auth} />
         <Route path="/quiz/:id" component={Quiz} />
-        <Route path="/random-film" component={RandomFilm} />
         <Route path="/" exact component={QuizList} />
         <Redirect to="/" />
       </Switch>;
     if (this.props.isAuthenticated) {
       routes = <Switch>
-          <Route path="/quiz-creator" component={QuizCreator} />
-          <Route path="/quiz/:id" component={Quiz} />
+          
           <Route path="/logout" component={Logout} />
           <Route path="/add-film" component={AddFilm} />
           <Route path="/random-film" component={RandomFilm} />
-          <Route path="/" exact component={QuizList} />
+          <Route path="/viewed" component={Viewed} />
+          <Route path="/" exact component={RandomFilm} />
           <Redirect to="/" />
         </Switch>;
     }
@@ -53,3 +55,5 @@ export default withRouter(
     mapDispatchToProps
   )(App)
 );
+
+

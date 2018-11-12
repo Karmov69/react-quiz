@@ -20,18 +20,15 @@ class QuizList extends Component {
   }
 
   render() {
-    return (
-      <div className={classes.QuizList}>
+    return <div className={classes.QuizList}>
         <div>
-          <h1>Список тестов</h1>
-          {this.props.loading && this.props.quizes.length !== 0 ? (
-            <Loader />
-          ) : (
-            <ul>{this.renderQuizes()}</ul>
-          )}
+          <h1>Movie Rand</h1>
+          {this.props.loading && this.props.quizes.length !== 0 ? <Loader /> : <ul
+            >
+              {this.renderQuizes()}
+            </ul>}
         </div>
-      </div>
-    );
+      </div>;
   }
 }
 
